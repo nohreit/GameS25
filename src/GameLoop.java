@@ -1,38 +1,67 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class GameLoop extends JPanel {
+public class GameLoop extends JPanel implements KeyListener {
 
-    Rect r1 = new Rect(200, 100, 200, 100);
-    Rect r2 = new Rect(450, 100, 300, 200);
+    Rect r1;
+    Rect r2;
+    int ax = 1;
+    int ay = 1;
+
+    boolean UP_pressed = false;
+    boolean DN_pressed = false;
+    boolean LT_pressed = false;
+    boolean RT_pressed = false;
 
     // GameLoop
-    public GameLoop () {
+    public GameLoop() {
+        // Create objects
+        r1 = new Rect(200, 100, 200, 100);
+        r2 = new Rect(450, 100, 300, 200);
+
+
+        // Set up game loop
         Timer timer = new Timer(16, e -> gameUpdate());
         timer.start();
+
+        // Set up listeners
+        setFocusable(true);
+        requestFocusInWindow();
+        addKeyListener(this);
+
+    }
+
+    public void gameLogic() {
+        if (UP_pressed) r1.moveBy(0, -ay);
+        if (DN_pressed) r1.moveBy(0, ay);
+        if (LT_pressed) r1.moveBy(-ax, 0);
+        if (RT_pressed) r1.moveBy(ax, 0);
+
+        if (r1.overlaps(r2)) r1.moveBy(0, ay);
+    }
+
+    public void drawGameGraphics(Graphics pen) {
+        pen.setColor(Color.BLUE);
+        r1.draw(pen);
+
+        pen.setColor(Color.GREEN);
+        r2.draw(pen);
     }
 
     // GameUpdate
     public void gameUpdate() {
         // Game update logic here
-        r1.moveBy(2, 1);
-        r2.moveBy(1, -1);
-
-
-        repaint(); // Refresh the screen
+        gameLogic();
+        repaint(); // Refresh the screen (Ask OS to update the screen)
     }
 
     @Override
     public void paint(Graphics pen) {
         super.paint(pen);
         // Draw game graphics here
-        pen.drawString(r1.overlaps(r2) ? "The rectangles overlap" : "The rectangles don't overlap", 100, 450);
-
-        pen.setColor(Color.CYAN);
-        r1.draw(pen);
-
-        pen.setColor(Color.GREEN);
-        r2.draw(pen);
+        drawGameGraphics(pen);
     }
 
     public static void main(String[] args) {
@@ -45,4 +74,23 @@ public class GameLoop extends JPanel {
         window.setVisible(true);
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP) UP_pressed = true;
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) DN_pressed = true;
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) LT_pressed = true;
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) RT_pressed = true;
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP) UP_pressed = false;
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) DN_pressed = false;
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) LT_pressed = false;
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) RT_pressed = false;
+    }
 }
