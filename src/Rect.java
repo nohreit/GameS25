@@ -19,6 +19,11 @@ public class Rect {
         return (x <= p.x) && (x + w >= p.x) && (y <= p.y) && (y + h >= p.y);
     }
 
+    public void moveBy(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+
     public boolean overlaps(Rect r) {
         return (x <= r.x + r.w) &&
                 (x + w >= r.x) &&
