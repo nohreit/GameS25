@@ -7,6 +7,8 @@ public class Rect {
 
     int old_x, old_y;
 
+    int spx, spy;
+
     public Rect(int x, int y, int w, int h) {
         this.x = x;
         this.y = y;
@@ -16,7 +18,17 @@ public class Rect {
     }
 
     public void chase(Rect r){
+        if(x > r.x) x-=spx;
+        if(x < r.x) x+=spx;
+        if(y > r.y) y-=spy;
+        if(y < r.y) y+=spy;
+    }
 
+    public void evade(Rect r){
+        if(x > r.x) x+=spx;
+        if(x < r.x) x-=spx;
+        if(y > r.y) y+=spy;
+        if(y < r.y) y-=spy;
     }
 
     public boolean comesFromBellow() {
