@@ -18,8 +18,8 @@ public class GameLoop extends JPanel implements KeyListener {
     // GameLoop
     public GameLoop() {
         // Create objects
-        r1 = new Rect(200, 100, 200, 100);
-        r2 = new Rect(450, 100, 300, 200);
+        r1 = new Rect(200, 100, 20, 20);
+        r2 = new Rect(250, 100, 50, 50);
 
 
         // Set up game loop
@@ -39,14 +39,20 @@ public class GameLoop extends JPanel implements KeyListener {
         if (LT_pressed) r1.moveBy(-ax, 0);
         if (RT_pressed) r1.moveBy(ax, 0);
 
-        if (r1.overlaps(r2)) r1.moveBy(0, ay);
+        if (r1.overlaps(r2)) {
+            if (r1.comesFromBellow()) r1.pushBy(0, -ay);
+            if (r1.comesFromAbove()) r1.pushBy(0, ay);
+            if (r1.comesFromLeft()) r1.pushBy(-ax, 0);
+            if (r1.comesFromRight()) r1.pushBy(ax, 0);
+
+        }
     }
 
     public void drawGameGraphics(Graphics pen) {
         pen.setColor(Color.BLUE);
         r1.draw(pen);
 
-        pen.setColor(Color.GREEN);
+        pen.setColor(Color.RED);
         r2.draw(pen);
     }
 

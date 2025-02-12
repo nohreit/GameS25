@@ -1,11 +1,11 @@
 import java.awt.Graphics;
 
 public class Rect {
-    int x;
-    int y;
+    int x, y;
 
-    int w;
-    int h;
+    int w, h;
+
+    int old_x, old_y;
 
     public Rect(int x, int y, int w, int h) {
         this.x = x;
@@ -15,11 +15,41 @@ public class Rect {
         this.h = h;
     }
 
+    public void chase(Rect r){
+
+    }
+
+    public boolean comesFromBellow() {
+        return y > old_y;
+    }
+
+    public boolean comesFromAbove() {
+        return y < old_y;
+    }
+
+    public boolean comesFromLeft() {
+        return x > old_x;
+    }
+
+    public boolean comesFromRight() {
+        return x < old_x;
+    }
+
+    // pushBy() is the reaction of the calling object due to the action of the moveBy() of the same calling object.
+    public void pushBy(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+
     public boolean contains(PointXY p) {
         return (x <= p.x) && (x + w >= p.x) && (y <= p.y) && (y + h >= p.y);
     }
 
     public void moveBy(int dx, int dy) {
+        // need to remember the last position of the object before update.
+        old_x = x;
+        old_y = y;
+
         x += dx;
         y += dy;
     }
